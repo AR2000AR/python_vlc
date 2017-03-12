@@ -20,9 +20,9 @@ def openDir():
         print("  !p : indiquer une nouvelle adresse complète")
         print("  !b : quitter le menu")
         print("  !? : afficher l'aide")
-    if os.path.exists("/mnt/USB-HDD/Musique"):
+    if os.path.exists("/mnt/USB-HDD/Musique"):  #Look for the directory. Useful if you use a extrenal storage
         path = "/mnt/USB-HDD/Musique"
-    else:
+    else:                                       #use a other path
         path = "/home/pi/Music"
     while 1==1:
         print("")
@@ -72,15 +72,15 @@ def openWeb():
             i = i + 1
         while 1==1:
             op = input("Indice du nom entre 0 et " + str(i-1) + " : ")
-            #try:
-            if int(op) < i:
-                Media.add_media(str(liste[int(op)]))
-                player.set_media_list(Media)
-                print(str(names[int(op)])," : ",str(liste[int(op)])," a bien été ajouté")
-                print("P pour lancer la lecture ou o pour ouvrir plus de fichiers")
-                break
-            #except:
-                #print("Indiquez un nombre")
+            try:
+                if int(op) < i:
+                    Media.add_media(str(liste[int(op)]))
+                    player.set_media_list(Media)
+                    print(str(names[int(op)])," : ",str(liste[int(op)])," a bien été ajouté")
+                    print("P pour lancer la lecture ou o pour ouvrir plus de fichiers")
+                    break
+            except:
+                print("Indiquez un nombre")
     else:
         print("Le fichier /home/pi/Remi/Chaine/Flux radio.txt ou /home/pi/Remi/Chaine/Nom Radio.txt n'existe pas")
         print("Créé le ou tapez l'adresse dans l'option d'ouverture f")
