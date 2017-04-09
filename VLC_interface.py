@@ -2,8 +2,12 @@
 import vlc
 import os
 import files
+import soundcloud
+client_id = "" #you need a soundcloud client id
 Instance = vlc.Instance()
 player = Instance.media_list_player_new()
+client = soundcloud.Client(client_id=client_id)
+print("This programme use the soundcloud lib. Check https://developers.soundcloud.com/ for more info")
 
 def openFile():
     path = input("File path :")
@@ -63,28 +67,59 @@ def openDir():
             aide()
 
 def openWeb():
-    liste = files.lir("/home/pi/Remi/Chaine/Flux radio.txt")
-    names = files.lir("/home/pi/Remi/Chaine/Nom Radio.txt")
-    i = 0
-    if liste != False or names != False:
+    while True:
+        print("1 : Radio")
+        print("2 : SoundCould")
+        web_mode = input("Faite un choix : ")
+        try:
+            web_mode =int(web_mode)
+        except:
+            print("Entrez un nombre")
+        if web_mode == 1:
+            source = "Radio.txt"
+            break
+        elif web_mode == 2:
+            source = "SoundCloud.txt"
+            break
+    liste=[]
+    names=[]
+    file = files.lir(source)
+    if file != False:
+        for tmp in file:
+            tmp2 = tmp.split(";")
+            liste.append(tmp2[0])
+            names.append(tmp2[1])
+        i = 0
         for name in names:
             print(i," : ",name)
             i = i + 1
         while 1==1:
             op = input("Indice du nom entre 0 et " + str(i-1) + " : ")
-            try:
-                if int(op) < i:
-                    Media.add_media(str(liste[int(op)]))
-                    player.set_media_list(Media)
-                    print(str(names[int(op)])," : ",str(liste[int(op)])," a bien été ajouté")
-                    print("P pour lancer la lecture ou o pour ouvrir plus de fichiers")
-                    break
-            except:
-                print("Indiquez un nombre")
+            if web_mode == 1:
+                try:
+                    if int(op) < i:
+                        Media.add_media(str(liste[int(op)]))
+                        player.set_media_list(Media)
+                        print(str(names[int(op)])," : ",str(liste[int(op)])," a bien été ajouté")
+                        print("P pour lancer la lecture ou o pour ouvrir plus de fichiers")
+                        break
+                except:
+                    print("Indiquez un nombre")
+            if web_mode == 2:
+                try:
+                    if int(op) < i:
+                        soundcloud_media = client.get("/resolve",url=liste[int(op)])
+                        Media.add_media(soundcloud_media.stream_url+"?client_id="+client_id)
+                        player.set_media_list(Media)
+                        print(names[int(op)]," a bien été ajouté")
+                        print("P pour lancer la lecture ou o pour ouvrir plus de fichiers")
+                        break
+                except:
+                    print("Indiquez un nombre")
     else:
         print("Le fichier /home/pi/Remi/Chaine/Flux radio.txt ou /home/pi/Remi/Chaine/Nom Radio.txt n'existe pas")
         print("Créé le ou tapez l'adresse dans l'option d'ouverture f")
-        
+
 def openMedia():
     while 1==1:
         print("f : fichier seul")
@@ -104,7 +139,7 @@ def openMedia():
             print("f : fichier seul")
             print("d : dossier entier")
             print("w : web")
-            
+
 Media=Instance.media_list_new()
 openMedia()
 print(" AIDE:")
@@ -115,7 +150,7 @@ print("  o : ouvir")
 print("  n : suivant")
 print("  b : précédent")
 print("  q : quitter")
-        
+
 while 1==1:
     op = input("? pour afficher l'aide :")
     if op == "?":
@@ -151,4 +186,4 @@ while 1==1:
     if op == "q":
         player.stop()
         break
-        
+
