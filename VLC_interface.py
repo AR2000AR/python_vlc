@@ -117,7 +117,7 @@ def openWeb():
                 except:
                     print("Indiquez un nombre")
     else:
-        print("Le fichier /home/pi/Remi/Chaine/Flux radio.txt ou /home/pi/Remi/Chaine/Nom Radio.txt n'existe pas")
+        print("Le fichier "+source+" n'existe pas")
         print("Créé le ou tapez l'adresse dans l'option d'ouverture f")
 
 def openMedia():
