@@ -118,7 +118,7 @@ def openWeb():
                     print("Indiquez un nombre")
     else:
         print("Le fichier "+source+" n'existe pas")
-        print("Créé le ou tapez l'adresse dans l'option d'ouverture f")
+        print("Créez le ou tapez l'adresse dans l'option d'ouverture f")
 
 def openMedia():
     while 1==1:
